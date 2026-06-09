@@ -1,0 +1,148 @@
+/**
+ * ==========================================
+ * Liquid Effects & Advanced Animations
+ * ==========================================
+ */
+
+/* SVG Blob Morphing */
+.blob-shape {
+    border-radius: 42% 58% 70% 30% / 45% 45% 55% 55%;
+    animation: morphing 10s infinite ease-in-out alternate;
+}
+
+@keyframes morphing {
+    0% {
+        border-radius: 42% 58% 70% 30% / 45% 45% 55% 55%;
+    }
+    25% {
+        border-radius: 70% 30% 52% 48% / 60% 40% 60% 40%;
+    }
+    50% {
+        border-radius: 52% 48% 30% 70% / 50% 50% 50% 50%;
+    }
+    75% {
+        border-radius: 30% 70% 70% 30% / 40% 60% 40% 60%;
+    }
+    100% {
+        border-radius: 42% 58% 70% 30% / 45% 45% 55% 55%;
+    }
+}
+
+/* Gentle Float Animation */
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-20px);
+    }
+}
+
+.float {
+    animation: float 6s ease-in-out infinite;
+}
+
+/* Glow Pulse */
+@keyframes glow-pulse {
+    0%, 100% {
+        box-shadow: 0 0 5px rgba(255, 117, 143, 0.5);
+    }
+    50% {
+        box-shadow: 0 0 20px rgba(255, 117, 143, 0.8);
+    }
+}
+
+.glow-pulse {
+    animation: glow-pulse 3s ease-in-out infinite;
+}
+
+/* Fade In */
+@keyframes fade-in {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.fade-in {
+    animation: fade-in 0.6s ease-out forwards;
+}
+
+/* Slide In From Left */
+@keyframes slide-in-left {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.slide-in-left {
+    animation: slide-in-left 0.6s ease-out forwards;
+}
+
+/* Slide In From Right */
+@keyframes slide-in-right {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.slide-in-right {
+    animation: slide-in-right 0.6s ease-out forwards;
+}
+
+/* Scale In */
+@keyframes scale-in {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.scale-in {
+    animation: scale-in 0.4s ease-out forwards;
+}
+
+/* Heart Beat */
+@keyframes heart-beat {
+    0%, 100% {
+        transform: scale(1);
+    }
+    25% {
+        transform: scale(1.1);
+    }
+    50% {
+        transform: scale(1);
+    }
+}
+
+.heart-beat {
+    animation: heart-beat 0.6s ease-in-out;
+}
+
+/* Stagger Animation Helper */
+.stagger-1 { animation-delay: 0.1s; }
+.stagger-2 { animation-delay: 0.2s; }
+.stagger-3 { animation-delay: 0.3s; }
+.stagger-4 { animation-delay: 0.4s; }
+.stagger-5 { animation-delay: 0.5s; }
+
+/* Smooth Scroll Behavior */
+html {
+    scroll-behavior: smooth;
+}

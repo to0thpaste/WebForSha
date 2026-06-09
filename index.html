@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Shalani's Memory Lane - A liquid-interactive web experience celebrating our love story">
+    <meta name="theme-color" content="#ff758f">
+
+    <title>💖 Shalani's Memory Lane</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="assets/css/theme.css">
+    <link rel="stylesheet" href="assets/css/animations.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- Loading Screen Overlay -->
+    <div id="loading-screen" class="loading-screen">
+        <div class="terminal-window glass-panel">
+            <div class="terminal-header">
+                <div class="window-controls">
+                    <span class="control red"></span>
+                    <span class="control yellow"></span>
+                    <span class="control green"></span>
+                </div>
+                <div class="terminal-title">Shalani's Memory Lane — boot sequence</div>
+            </div>
+            <div id="log-container" class="log-container" aria-live="polite"></div>
+            <div class="progress-wrap">
+                <div id="terminal-progress" class="terminal-progress"></div>
+            </div>
+            <div id="enter-action" class="enter-action"></div>
+        </div>
+    </div>
+
+    <!-- Responsive Navbar -->
+    <header class="site-nav">
+        <div class="nav-brand">
+            <a href="#home">Shalani's Memory Lane</a>
+        </div>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <nav class="nav-links" id="nav-links">
+            <a href="#home">Home</a>
+            <a href="#journey">Journey</a>
+            <a href="#memories">Memories</a>
+            <a href="#audio">Audio</a>
+            <a href="gallery.html">Gallery</a>
+        </nav>
+        <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle theme">☀️</button>
+    </header>
+
+    <!-- Liquid Morph Background -->
+    <div class="liquid-bg-container">
+        <div class="liquid-blob blob-pink"></div>
+        <div class="liquid-blob blob-violet"></div>
+    </div>
+
+    <!-- Particle Canvas Background -->
+    <canvas id="particle-canvas"></canvas>
+
+    <!-- Hero Section -->
+    <header class="hero" id="home"
+        style="background: linear-gradient(135deg, rgba(255, 117, 143, 0.3), rgba(255, 192, 203, 0.3)), url('assets/images/WhatsApp Image 2026-06-06 at 6.14.24 PM.jpeg') center/cover no-repeat; position: relative;">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1 class="romantic-heading">Shalani's Memory Lane</h1>
+            <p class="hero-subtitle">A liquid journey through our love story ✨</p>
+        </div>
+    </header>
+
+    <!-- Love Counter Section -->
+    <section class="counter-section">
+        <h2 class="section-title">Time Together</h2>
+        <p class="section-subtitle">Every moment with you is precious.</p>
+
+        <div class="counter-wrapper">
+            <h3>1st seen</h3>
+            <p class="counter-date">October 13, 2024</p>
+            <div class="counter-display" id="first-seen-counter"></div>
+        </div>
+
+        <div class="counter-wrapper">
+            <h3>Started our relationship</h3>
+            <p class="counter-date">March 17, 2025</p>
+            <div class="counter-display" id="relationship-counter"></div>
+        </div>
+
+        <div class="counter-wrapper">
+            <h3>1st kiss</h3>
+            <p class="counter-date">August 19, 2025</p>
+            <div class="counter-display" id="first-kiss-counter"></div>
+        </div>
+    </section>
+
+    <!-- Relationship Timeline -->
+    <section class="timeline-section" id="journey">
+        <h2 class="section-title">Relationship Timeline</h2>
+        <p class="section-subtitle">A clean vertical story of our milestones.</p>
+        <div class="timeline-wrapper">
+            <div class="timeline-line"></div>
+
+            <article class="timeline-item left glass-panel fade-in stagger-1">
+                <span class="timeline-badge">Milestone 1</span>
+                <div class="timeline-content">
+                    <h3>First Seen</h3>
+                    <p class="timeline-date">October 13, 2024</p>
+                    <p>We started with a spark, and every moment since has been a treasure.</p>
+                </div>
+            </article>
+
+            <article class="timeline-item right glass-panel fade-in stagger-2">
+                <span class="timeline-badge">Milestone 2</span>
+                <div class="timeline-content">
+                    <h3>Relationship Started</h3>
+                    <p class="timeline-date">March 17, 2025</p>
+                    <p>This was the day we promised to grow together, laugh together, and love forever.</p>
+                </div>
+            </article>
+
+            <article class="timeline-item left glass-panel fade-in stagger-3">
+                <span class="timeline-badge">Milestone 3</span>
+                <div class="timeline-content">
+                    <h3>First Kiss</h3>
+                    <p class="timeline-date">August 19, 2025</p>
+                    <p>A single kiss that became the heartbeat of our story.</p>
+                </div>
+            </article>
+
+            <article class="timeline-item right glass-panel fade-in stagger-4">
+                <span class="timeline-badge">Milestone 4</span>
+                <div class="timeline-content">
+                    <h3>Forever Promise</h3>
+                    <p class="timeline-date">Today</p>
+                    <p>Every memory we build adds another chapter to our forever.</p>
+                </div>
+            </article>
+        </div>
+    </section>
+
+    <!-- Love Notes Section -->
+    <section class="love-notes-section" id="love-notes">
+        <h2 class="section-title">Reason Why I Love You</h2>
+        <p class="section-subtitle">Every little note is a reason you’re the one.</p>
+        <div class="love-notes-grid">
+            <div class="love-note-card glass-panel fade-in stagger-1">
+                <div class="note-icon">💌</div>
+                <p class="typewriter-text" data-text="The way your laugh makes every room feel warm and safe."></p>
+            </div>
+            <div class="love-note-card glass-panel fade-in stagger-2">
+                <div class="note-icon">🌟</div>
+                <p class="typewriter-text"
+                    data-text="Your strength inspires me every day, even in the quietest moments."></p>
+            </div>
+            <div class="love-note-card glass-panel fade-in stagger-3">
+                <div class="note-icon">🌙</div>
+                <p class="typewriter-text" data-text="With you, ordinary days turn into beautiful adventures." </p>
+            </div>
+        </div>
+        <div class="quiz-cta">
+            <p>Ready for a secret surprise? Test how well we know each other.</p>
+            <button id="quiz-open-btn" class="btn-secondary">Take the Love Quiz</button>
+        </div>
+    </section>
+
+    <!-- Memory Nodes Section (Placeholder) -->
+    <section class="memories-section" id="memories">
+        <h2 class="section-title">Memory Nodes</h2>
+        <p class="section-subtitle">Hover to unlock special moments...</p>
+
+        <div class="memories-grid">
+            <!-- Memory Node 1: First Meet -->
+            <div class="memory-node fade-in stagger-1"
+                style="background-image: url('assets/images/WhatsApp Image 2025-02-12 at 13.12.25_0d483b3.jpg');">
+                <div class="memory-overlay-dark"></div>
+                <div class="memory-content glass-panel">
+                    <h3>First Meeting</h3>
+                    <p>October 13, 2024 - The moment everything changed...</p>
+                </div>
+            </div>
+
+            <!-- Memory Node 2: First Date -->
+            <div class="memory-node fade-in stagger-2"
+                style="background-image: url('assets/images/WhatsApp Image 2026-06-06 at 6.12.08 PM (1).jpeg');">
+                <div class="memory-overlay-dark"></div>
+                <div class="memory-content glass-panel">
+                    <h3>Our Love Grows</h3>
+                    <p>March 17, 2025 - When you became my everything...</p>
+                </div>
+            </div>
+
+            <!-- Memory Node 3: First Kiss -->
+            <div class="memory-node fade-in stagger-3"
+                style="background-image: url('assets/images/WhatsApp Image 2026-06-06 at 6.12.14 PM (1).jpeg');">
+                <div class="memory-overlay-dark"></div>
+                <div class="memory-content glass-panel">
+                    <h3>First Kiss 💋</h3>
+                    <p>August 19, 2025 - A moment frozen in time...</p>
+                </div>
+            </div>
+            <!-- Memory Node 4: Forever In Love -->
+            <div class="memory-node fade-in stagger-4"
+                style="background-image: url('assets/images/WhatsApp Image 2026-06-06 at 6.14.47 PM (1).jpeg');">
+                <div class="memory-overlay-dark"></div>
+                <div class="memory-content glass-panel">
+                    <h3>Forever in Love</h3>
+                    <p>FOREVER - A promise we made to each other...</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Audio Player Section -->
+    <section class="audio-section" id="audio">
+        <h2 class="section-title">Our Soundtrack</h2>
+        <p class="section-subtitle">Nubawa Soya by Dilu Beats - Our favorite love song.</p>
+        <div class="audio-player-container glass-panel">
+            <div class="audio-meta" id="audio-meta">
+                <p class="audio-title">Nubawa Soya</p>
+                <p class="audio-artist">By Dilu Beats</p>
+            </div>
+            <audio id="love-audio" controls preload="metadata" style="width: 100%; max-width: 100%;">
+                <source id="audio-source" src="assets/audio/Nubawa_Soya.mp3" type="audio/mpeg">
+                Your browser does not support the audio element.
+            </audio>
+            <p class="audio-status" id="audio-status">Ready to play</p>
+        </div>
+    </section>
+
+    <div id="audio-control-widget" class="audio-control-widget">
+        <button id="widget-play-pause" class="control-btn" aria-label="Play or pause audio">▶</button>
+        <button id="widget-mute" class="control-btn" aria-label="Mute audio">🔊</button>
+        <div class="widget-track-info">
+            <span id="widget-track-title">Soundtrack</span>
+            <small id="widget-track-status">Tap to control music</small>
+        </div>
+    </div>
+
+    <!-- Quiz Modal -->
+    <div id="quiz-modal" class="quiz-modal" aria-hidden="true">
+        <div class="quiz-panel glass-panel">
+            <button id="quiz-close-btn" class="modal-close" aria-label="Close quiz">×</button>
+            <div class="quiz-header">
+                <h3>How Well Do You Know Me?</h3>
+                <p>Answer 3 sweet questions to reveal a secret message.</p>
+            </div>
+            <div id="quiz-content" class="quiz-content"></div>
+            <div id="quiz-result" class="quiz-result"></div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>Made with ❤️ by Menula for Shalani</p>
+        <p class="footer-date">2024 - 2025</p>
+    </footer>
+
+    <!-- Scripts - Theme Engine (must run first) -->
+    <script src="assets/js/theme-engine.js"></script>
+
+    <!-- Particle Engine -->
+    <script src="assets/js/particle-engine.js"></script>
+
+    <!-- Love Counter -->
+    <script src="assets/js/love-counter.js"></script>
+
+    <!-- Main App -->
+    <script src="app.js"></script>
+</body>
+
+</html>
