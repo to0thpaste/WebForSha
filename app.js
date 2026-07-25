@@ -14,7 +14,7 @@ console.log('💖 Shalani\'s Memory Lane - Loading...');
  */
 function initializeApp() {
     console.log('✨ App Initialized Successfully');
-    
+
     // Add scroll reveal animations
     observeScrollElements();
 
@@ -92,6 +92,7 @@ function initSmoothScroll() {
 }
 
 function initGallery() {
+    sessionStorage.setItem('sml_lastPage', 'gallery.html');
     const galleryGrid = document.getElementById('gallery-grid');
     if (!galleryGrid) return;
 
@@ -100,11 +101,9 @@ function initGallery() {
         'WhatsApp Image 2026-06-06 at 6.11.59 PM.jpeg',
         'WhatsApp Image 2026-06-06 at 6.12.00 PM.jpeg',
         'WhatsApp Image 2026-06-06 at 6.12.06 PM (1).jpeg',
-        'WhatsApp Image 2026-06-06 at 6.12.06 PM.jpeg',
         'WhatsApp Image 2026-06-06 at 6.12.07 PM (1).jpeg',
         'WhatsApp Image 2026-06-06 at 6.12.07 PM.jpeg',
         'WhatsApp Image 2026-06-06 at 6.12.08 PM (1).jpeg',
-        'WhatsApp Image 2026-06-06 at 6.12.08 PM.jpeg',
         'WhatsApp Image 2026-06-06 at 6.12.09 PM (1).jpeg',
         'WhatsApp Image 2026-06-06 at 6.12.09 PM (2).jpeg',
         'WhatsApp Image 2026-06-06 at 6.12.09 PM.jpeg',
@@ -120,8 +119,6 @@ function initGallery() {
         'WhatsApp Image 2026-06-06 at 6.12.14 PM (1).jpeg',
         'WhatsApp Image 2026-06-06 at 6.12.14 PM.jpeg',
         'WhatsApp Image 2026-06-06 at 6.12.15 PM.jpeg',
-        'WhatsApp Image 2026-06-06 at 6.14.09 PM.jpeg',
-        'WhatsApp Image 2026-06-06 at 6.14.13 PM.jpeg',
         'WhatsApp Image 2026-06-06 at 6.14.24 PM.jpeg',
         'WhatsApp Image 2026-06-06 at 6.14.30 PM.jpeg',
         'WhatsApp Image 2026-06-06 at 6.14.42 PM.jpeg',
@@ -130,17 +127,8 @@ function initGallery() {
         'WhatsApp Image 2026-06-06 at 6.14.46 PM.jpeg',
         'WhatsApp Image 2026-06-06 at 6.14.47 PM (1).jpeg',
         'WhatsApp Image 2026-06-06 at 6.14.47 PM.jpeg',
-        'WhatsApp Image 2026-06-06 at 6.14.48 PM (1).jpeg',
-        'WhatsApp Image 2026-06-06 at 6.14.48 PM.jpeg',
-        'WhatsApp Image 2026-06-06 at 6.14.49 PM (1).jpeg',
-        'WhatsApp Image 2026-06-06 at 6.14.49 PM (2).jpeg',
-        'WhatsApp Image 2026-06-06 at 6.14.49 PM.jpeg',
-        'WhatsApp Image 2026-06-06 at 6.14.50 PM (1).jpeg',
-        'WhatsApp Image 2026-06-06 at 6.14.50 PM (2).jpeg',
-        'WhatsApp Image 2026-06-06 at 6.14.50 PM.jpeg',
         'WhatsApp Image 2026-06-06 at 6.14.51 PM (1).jpeg',
         'WhatsApp Image 2026-06-06 at 6.14.51 PM.jpeg',
-        'WhatsApp Image 2026-06-06 at 6.14.52 PM (1).jpeg',
         'WhatsApp Image 2026-06-06 at 6.14.52 PM.jpeg',
         'WhatsApp Image 2026-06-06 at 6.14.53 PM (1).jpeg',
         'WhatsApp Image 2026-06-06 at 6.14.53 PM (2).jpeg',
@@ -162,8 +150,6 @@ function initGallery() {
         'WhatsApp Image 2026-06-06 at 6.15.07 PM (1).jpeg',
         'WhatsApp Image 2026-06-06 at 6.15.07 PM (2).jpeg',
         'WhatsApp Image 2026-06-06 at 6.15.07 PM.jpeg',
-        'WhatsApp Image 2026-06-06 at 6.15.08 PM (1).jpeg',
-        'WhatsApp Image 2026-06-06 at 6.15.08 PM.jpeg',
         'WhatsApp Image 2026-06-06 at 6.15.09 PM.jpeg'
     ];
 
@@ -301,9 +287,6 @@ function showEnterAction() {
             sessionStorage.setItem('sml_audioTime', '0');
         }
 
-        // Mark first visit as complete so loader never shows again
-        localStorage.setItem('sml_hasVisited', 'true');
-
         if (overlay) {
             overlay.classList.add('fade-out');
             setTimeout(() => {
@@ -325,15 +308,44 @@ function skipLoadingScreen() {
     document.body.classList.add('on-ready');
 }
 
+function isPageReload() {
+    try {
+        const navEntries = performance.getEntriesByType('navigation');
+        if (navEntries && navEntries.length > 0) {
+            return navEntries[0].type === 'reload';
+        }
+        if (performance.navigation) {
+            return performance.navigation.type === performance.navigation.TYPE_RELOAD;
+        }
+    } catch (e) {
+        console.warn('Error detecting reload status:', e);
+    }
+    return false;
+}
+
 function initTerminalLoader() {
     const loadingScreen = document.getElementById('loading-screen');
     if (!loadingScreen) return;
 
-    // If user has visited before, skip the loading screen immediately
-    if (localStorage.getItem('sml_hasVisited')) {
+    // Check if the current page load is a browser reload/refresh
+    const isReload = isPageReload();
+
+    // Check if user is returning back from gallery.html
+    const lastPage = sessionStorage.getItem('sml_lastPage');
+    const isFromGallery = (document.referrer && document.referrer.includes('gallery.html')) || lastPage === 'gallery.html';
+
+    // Remove legacy localStorage item if present
+    localStorage.removeItem('sml_hasVisited');
+
+    // Skip the terminal loading screen ONLY if it's NOT a reload and user is returning from gallery.html
+    if (!isReload && isFromGallery) {
         skipLoadingScreen();
+        sessionStorage.setItem('sml_lastPage', 'index.html');
         return;
     }
+
+    // Set lastPage to index.html for future navigation checks
+    sessionStorage.setItem('sml_lastPage', 'index.html');
 
     if (document.readyState === 'complete') {
         runTerminalStartup();
@@ -565,7 +577,7 @@ function initNavToggle() {
  */
 function handleResponsiveTheme() {
     const isMobile = window.innerWidth < 768;
-    
+
     if (isMobile) {
         document.body.classList.add('mobile-layout');
     } else {
@@ -573,16 +585,8 @@ function handleResponsiveTheme() {
     }
 }
 
-// Intercept Ctrl+Shift+R (hard refresh) to clear the visited flag
-// so the loading screen reappears on the next load.
-// Ctrl+R (soft refresh) leaves the flag intact and skips the loader.
-document.addEventListener('keydown', (e) => {
-    const isHardRefresh = (e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'r' || e.key === 'R');
-    if (isHardRefresh) {
-        localStorage.removeItem('sml_hasVisited');
-        // Allow the browser's default hard-refresh to proceed
-    }
-});
+// Clean up legacy localStorage flag if it exists
+localStorage.removeItem('sml_hasVisited');
 
 // Initialize on page load
 if (document.readyState === 'loading') {

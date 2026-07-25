@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ff758f" />
+      <stop offset="50%" stop-color="#ff4d6d" />
+      <stop offset="100%" stop-color="#c9184a" />
+    </linearGradient>
+    <linearGradient id="heartGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.95" />
+      <stop offset="100%" stop-color="#fff0f3" stop-opacity="0.85" />
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#800f2f" flood-opacity="0.4"/>
+    </filter>
+  </defs>
+
+  <!-- Background Squircle -->
+  <rect x="32" y="32" width="448" height="448" rx="112" fill="url(#bgGrad)" filter="url(#shadow)" />
+  
+  <!-- Subtle inner glossy highlight -->
+  <path d="M 32 144 C 32 82 82 32 144 32 L 368 32 C 430 32 480 82 480 144 C 480 100 368 60 256 60 C 144 60 32 100 32 144 Z" fill="#ffffff" opacity="0.25" />
+
+  <!-- Glowing Heart Emblem -->
+  <path d="M 256 400 C 256 400 110 300 110 205 C 110 150 152 110 205 110 C 235 110 256 130 256 130 C 256 130 277 110 307 110 C 360 110 402 150 402 205 C 402 300 256 400 256 400 Z" fill="url(#heartGrad)" />
+  
+  <!-- Sparkles -->
+  <circle cx="355" cy="145" r="14" fill="#ffffff" opacity="0.9" />
+  <circle cx="380" cy="175" r="8" fill="#ffffff" opacity="0.7" />
+</svg>
