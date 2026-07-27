@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="si">
 
 <head>
     <meta charset="UTF-8">
@@ -15,7 +15,7 @@
     <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
     <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 
-    <title>Our Memory Lane</title>
+    <title>අපේ ආදර මතක මාවත</title>
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -40,12 +40,13 @@
                     <span class="control yellow"></span>
                     <span class="control green"></span>
                 </div>
-                <div class="terminal-title">Our Memory Lane — boot sequence</div>
+                <div class="terminal-title">අපේ ආදර මතක මාවත — boot sequence</div>
             </div>
             <div id="log-container" class="log-container" aria-live="polite"></div>
             <div class="progress-wrap">
                 <div id="terminal-progress" class="terminal-progress"></div>
             </div>
+            <br>
             <div id="enter-action" class="enter-action"></div>
         </div>
     </div>
@@ -53,7 +54,7 @@
     <!-- Responsive Navbar -->
     <header class="site-nav">
         <div class="nav-brand">
-            <a href="#home">Our Memory Lane</a>
+            <a href="#home">අපේ ආදර මාවත</a>
         </div>
         <button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation">
             <span></span>
@@ -62,10 +63,10 @@
         </button>
         <nav class="nav-links" id="nav-links">
             <a href="#home">Home</a>
-            <a href="#journey">Journey</a>
-            <a href="#memories">Memories</a>
-            <a href="#audio">Audio</a>
-            <a href="gallery.html">Gallery</a>
+            <a href="#journey">අපේ ගමන</a>
+            <a href="#memories">මතකයන්</a>
+            <a href="#audio">අපේ සින්දුව</a>
+            <a href="gallery.html">ගැලරිය</a>
         </nav>
         <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle theme">☀️</button>
     </header>
@@ -84,81 +85,82 @@
         style="background: linear-gradient(135deg, rgba(255, 117, 143, 0.3), rgba(255, 192, 203, 0.3)), url('assets/images/WhatsApp Image 2026-06-06 at 6.14.24 PM.jpeg') center/cover no-repeat; position: relative;">
         <div class="hero-overlay"></div>
         <div class="hero-content">
-            <h1 class="romantic-heading">Our Memory Lane</h1>
-            <p class="hero-subtitle">A liquid journey through our love story ✨</p>
+            <h1 class="romantic-heading">අපේ ආදර මතක මාවත</h1>
+            <p class="hero-subtitle">අපේ ආදර කතාවේ සොඳුරු මතක සටහන් ✨</p>
         </div>
     </header>
 
     <!-- Love Counter Section -->
     <section class="counter-section">
-        <h2 class="section-title">Time Together</h2>
-        <p class="section-subtitle">Every moment with you is precious.</p>
+        <h2 class="section-title">අපි එකට ගෙවපු කාලය</h2>
+        <p class="section-subtitle">ඔයත් එක්ක ගෙවෙන හැම තත්පරයක්ම මට මාරම වටිනවා.</p>
 
         <div class="counter-wrapper">
-            <h3>1st seen</h3>
-            <p class="counter-date">October 13, 2024</p>
+            <h3>මුලින්ම දැකපු දවස</h3>
+            <p class="counter-date">2024 ඔක්තෝබර් 13</p>
             <div class="counter-display" id="first-seen-counter"></div>
         </div>
 
         <div class="counter-wrapper">
-            <h3>Started our relationship</h3>
-            <p class="counter-date">March 17, 2025</p>
+            <h3>ආදරේ පටන් ගත්ත දවස</h3>
+            <p class="counter-date">2025 මාර්තු 17</p>
             <div class="counter-display" id="relationship-counter"></div>
         </div>
 
         <div class="counter-wrapper">
-            <h3>1st kiss</h3>
-            <p class="counter-date">August 19, 2025</p>
+            <h3>පළමු හාදුව</h3>
+            <p class="counter-date">2025 අගෝස්තු 19</p>
             <div class="counter-display" id="first-kiss-counter"></div>
         </div>
 
         <div class="counter-wrapper">
-            <h3>Our next anniversary</h3>
-            <p class="counter-date" id="anniversary-date-label">March 17, 2027</p>
+            <h3>අපේ ඊළඟ සංවත්සරය</h3>
+            <p class="counter-date" id="anniversary-date-label">2027 මාර්තු 17</p>
             <div class="counter-display" id="anniversary-counter"></div>
         </div>
     </section>
 
     <!-- Relationship Timeline -->
     <section class="timeline-section" id="journey">
-        <h2 class="section-title">Relationship Timeline</h2>
-        <p class="section-subtitle">A clean vertical story of our milestones.</p>
+        <h2 class="section-title">අපේ ආදරේ සන්ධිස්ථාන</h2>
+        <p class="section-subtitle">අපි ආපු ගමනේ ලස්සනම කඩඉම්.</p>
         <div class="timeline-wrapper">
             <div class="timeline-line"></div>
 
             <article class="timeline-item left glass-panel fade-in stagger-1">
-                <span class="timeline-badge">Milestone 1</span>
+                <span class="timeline-badge">කඩඉම 1</span>
                 <div class="timeline-content">
-                    <h3>First Seen</h3>
-                    <p class="timeline-date">October 13, 2024</p>
-                    <p>We started with a spark, and every moment since has been a treasure.</p>
+                    <h3>පළමු හමුවීම</h3>
+                    <p class="timeline-date">2024 ඔක්තෝබර් 13</p>
+                    <p>පුංචි අහඹු හමුවීමකින් පටන් ගත්ත අපේ ආදරේ, අද වෙනකන් ගෙවුණු හැම තත්පරයක්ම මට මහ මෙරක් තරම් වටිනවා.
+                    </p>
                 </div>
             </article>
 
             <article class="timeline-item right glass-panel fade-in stagger-2">
-                <span class="timeline-badge">Milestone 2</span>
+                <span class="timeline-badge">කඩඉම 2</span>
                 <div class="timeline-content">
-                    <h3>Relationship Started</h3>
-                    <p class="timeline-date">March 17, 2025</p>
-                    <p>This was the day we promised to grow together, laugh together, and love forever.</p>
+                    <h3>ආදරේ පටන් ගත්ත දවස</h3>
+                    <p class="timeline-date">2025 මාර්තු 17</p>
+                    <p>හැමදාම එකට හිනාවෙලා, එකට එකතු වෙලා, ආදරෙන් ඉන්න අපි දෙන්නා පොරොන්දු වුණු දවස.</p>
                 </div>
             </article>
 
             <article class="timeline-item left glass-panel fade-in stagger-3">
-                <span class="timeline-badge">Milestone 3</span>
+                <span class="timeline-badge">කඩඉම 3</span>
                 <div class="timeline-content">
-                    <h3>First Kiss</h3>
-                    <p class="timeline-date">August 19, 2025</p>
-                    <p>A single kiss that became the heartbeat of our story.</p>
+                    <h3>පළමු හාදුව</h3>
+                    <p class="timeline-date">2025 අගෝස්තු 19</p>
+                    <p>අපේ ආදර කතාවට තවත් ලස්සන ගැස්මක් එකතු කළ ඒ ආදරණීය මොහොත.</p>
                 </div>
             </article>
 
             <article class="timeline-item right glass-panel fade-in stagger-4">
-                <span class="timeline-badge">Milestone 4</span>
+                <span class="timeline-badge">කඩඉම 4</span>
                 <div class="timeline-content">
-                    <h3>Forever Promise</h3>
-                    <p class="timeline-date">Today</p>
-                    <p>Every memory we build adds another chapter to our forever.</p>
+                    <h3>සදාකාලික පොරොන්දුව</h3>
+                    <p class="timeline-date">අද දින</p>
+                    <p>අපි එකතු වෙලා හදන හැම මතකයක්ම, අපේ ආදර කතාවේ තවත් ලස්සන පිටුවක් එකතු කරනවා.</p>
                 </div>
             </article>
         </div>
@@ -166,33 +168,36 @@
 
     <!-- Love Notes Section -->
     <section class="love-notes-section" id="love-notes">
-        <h2 class="section-title">Reason Why I Love You</h2>
-        <p class="section-subtitle">Every little note is a reason you’re the one.</p>
+        <h2 class="section-title">මම ඔයාට ආදරේ කරන්න හේතු</h2>
+        <p class="section-subtitle">මේ පුංචි සටහන් වලින් කියවෙන්නේ ඔයා මගේ ජීවිතේ වුණේ ඇයි කියලයි.</p>
         <div class="love-notes-grid">
             <div class="love-note-card glass-panel fade-in stagger-1">
                 <div class="note-icon">💌</div>
-                <p class="typewriter-text" data-text="The way your laugh makes every room feel warm and safe."></p>
+                <p class="typewriter-text"
+                    data-text="ඔයාගේ ලස්සන හිනාව දකිද්දි මගේ මුළු ලෝකයම හරිම ආරක්ෂිතයි, සැනසිලිදායකයි කියලා හිතෙනවා.">
+                </p>
             </div>
             <div class="love-note-card glass-panel fade-in stagger-2">
                 <div class="note-icon">🌟</div>
-                <p class="typewriter-text"
-                    data-text="Your strength inspires me every day, even in the quietest moments."></p>
+                <p class="typewriter-text" data-text="ඔයාගේ හිතේ තියෙන ශක්තිය මටත් හැමදාම ජීවිතේට ලොකු හයියක් වෙනවා.">
+                </p>
             </div>
             <div class="love-note-card glass-panel fade-in stagger-3">
                 <div class="note-icon">🌙</div>
-                <p class="typewriter-text" data-text="With you, ordinary days turn into beautiful adventures." </p>
+                <p class="typewriter-text"
+                    data-text="ඔයත් එක්ක ඉද්දි හරිම සාමාන්‍ය දවස් පවා මාරම ලස්සන මතකයන් බවට පත්වෙනවා."></p>
             </div>
         </div>
         <div class="quiz-cta">
-            <p>Ready for a secret surprise? Test how well we know each other.</p>
-            <button id="quiz-open-btn" class="btn-secondary">Take the Love Quiz</button>
+            <p>පුංචි සප්‍රයිස් එකකට ලෑස්තිද? අපි දෙන්නා ගැන අපි කොච්චර දන්නවද කියලා බලමුද?</p>
+            <button id="quiz-open-btn" class="btn-secondary">ක්විස් එකට උත්තර දෙන්න</button>
         </div>
     </section>
 
     <!-- Memory Nodes Section (Placeholder) -->
     <section class="memories-section" id="memories">
-        <h2 class="section-title">Memory Nodes</h2>
-        <p class="section-subtitle">Hover to unlock special moments...</p>
+        <h2 class="section-title">සොඳුරු මතකයන්</h2>
+        <p class="section-subtitle">Touch/Hover කරලා ඒ විශේෂ මොහොතවල් මතක් කරගන්න...</p>
 
         <div class="memories-grid">
             <!-- Memory Node 1: First Meet -->
@@ -200,8 +205,8 @@
                 style="background-image: url('assets/images/WhatsApp Image 2025-02-12 at 13.12.25_0d483b3.jpg');">
                 <div class="memory-overlay-dark"></div>
                 <div class="memory-content glass-panel">
-                    <h3>First Meeting</h3>
-                    <p>October 13, 2024 - The moment everything changed...</p>
+                    <h3>පළමු හමුවීම</h3>
+                    <p>2024 ඔක්තෝබර් 13 - සෑම දෙයක්ම වෙනස් වුණු ඒ ලස්සන මොහොත...</p>
                 </div>
             </div>
 
@@ -210,8 +215,8 @@
                 style="background-image: url('assets/images/WhatsApp Image 2026-06-06 at 6.12.08 PM (1).jpeg');">
                 <div class="memory-overlay-dark"></div>
                 <div class="memory-content glass-panel">
-                    <h3>Our Love Grows</h3>
-                    <p>March 17, 2025 - When you became my everything...</p>
+                    <h3>අපේ ආදරේ පටන් ගැන්ම</h3>
+                    <p>2025 මාර්තු 17 - ඔයා මගේ මුළු ලෝකයම වුණු දවස...</p>
                 </div>
             </div>
 
@@ -220,8 +225,8 @@
                 style="background-image: url('assets/images/WhatsApp Image 2026-06-06 at 6.12.14 PM (1).jpeg');">
                 <div class="memory-overlay-dark"></div>
                 <div class="memory-content glass-panel">
-                    <h3>First Kiss 💋</h3>
-                    <p>August 19, 2025 - A moment frozen in time...</p>
+                    <h3>පළමු හාදුව 💋</h3>
+                    <p>2025 අගෝස්තු 19 - කාලය නතර වුණු ඒ සොඳුරු මොහොත...</p>
                 </div>
             </div>
             <!-- Memory Node 4: Forever In Love -->
@@ -229,8 +234,8 @@
                 style="background-image: url('assets/images/WhatsApp Image 2026-06-06 at 6.14.47 PM (1).jpeg');">
                 <div class="memory-overlay-dark"></div>
                 <div class="memory-content glass-panel">
-                    <h3>Forever in Love</h3>
-                    <p>FOREVER - A promise we made to each other...</p>
+                    <h3>සදාකාලික ආදරය</h3>
+                    <p>FOREVER - අපි දෙන්නා එකිනෙකාට වුණු පොරොන්දුව...</p>
                 </div>
             </div>
         </div>
@@ -238,18 +243,18 @@
 
     <!-- Audio Player Section -->
     <section class="audio-section" id="audio">
-        <h2 class="section-title">Our Soundtrack</h2>
-        <p class="section-subtitle">Nubawa Soya by Dilu Beats - Our favorite love song.</p>
+        <h2 class="section-title">අපේ ආදර තේමා ගීතය</h2>
+        <p class="section-subtitle">"නුඹව සොයා" - දිලූ බීට්ස් (අපි දෙන්නගේ ප්‍රියතම සිංදුව)</p>
         <div class="audio-player-container glass-panel">
             <div class="audio-meta" id="audio-meta">
-                <p class="audio-title">Nubawa Soya</p>
+                <p class="audio-title">නුඹව සොයා</p>
                 <p class="audio-artist">By Dilu Beats</p>
             </div>
             <audio id="love-audio" controls preload="metadata" style="width: 100%; max-width: 100%;">
                 <source id="audio-source" src="assets/audio/Nubawa_Soya.mp3" type="audio/mpeg">
-                Your browser does not support the audio element.
+                ඔබගේ බ්‍රවුසරය මඟින් Audio Element සහාය නොදක්වයි.
             </audio>
-            <p class="audio-status" id="audio-status">Ready to play</p>
+            <p class="audio-status" id="audio-status">සින්දුව ප්ලේ කරන්න ලෑස්තියි</p>
         </div>
     </section>
 
@@ -257,8 +262,8 @@
         <button id="widget-play-pause" class="control-btn" aria-label="Play or pause audio">▶</button>
         <button id="widget-mute" class="control-btn" aria-label="Mute audio">🔊</button>
         <div class="widget-track-info">
-            <span id="widget-track-title">Soundtrack</span>
-            <small id="widget-track-status">Tap to control music</small>
+            <span id="widget-track-title">පසුබිම් සංගීතය</span>
+            <small id="widget-track-status">Music control කිරීමට ටැප් කරන්න</small>
         </div>
     </div>
 
@@ -267,8 +272,8 @@
         <div class="quiz-panel glass-panel">
             <button id="quiz-close-btn" class="modal-close" aria-label="Close quiz">×</button>
             <div class="quiz-header">
-                <h3>How Well Do You Know Me?</h3>
-                <p>Answer 3 sweet questions to reveal a secret message.</p>
+                <h3>ඔයා මං ගැන කොච්චර දන්නවද?</h3>
+                <p>පුංචි රහස් පණිවිඩය බලන්න ප්‍රශ්න 3කට උත්තර දෙන්න.</p>
             </div>
             <div id="quiz-content" class="quiz-content"></div>
             <div id="quiz-result" class="quiz-result"></div>
@@ -277,8 +282,8 @@
 
     <!-- Footer -->
     <footer class="footer">
-        <p>Made with ❤️ by Menula for Shalani</p>
-        <p class="footer-date">2024 - 2025</p>
+        <p>ශලනි වෙනුවෙන් මෙනුලගෙන් ❤️ ආදරයෙන්...</p>
+        <p class="footer-date">2024 - 2026</p>
     </footer>
 
     <!-- Scripts - Theme Engine (must run first) -->

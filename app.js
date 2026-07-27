@@ -224,7 +224,7 @@ async function runTerminalStartup() {
         '[INFO] Initializing dynamic affection modules...',
         '[WARN] Warning: Love levels exceeding normal capacity! Overclocking...',
         '[INFO] Transforming emotional data into digital format...',
-        '[SUCCESS] Heart sync complete. Welcome, Wasthu! ❤️'
+        '[SUCCESS] Heart sync complete. Welcome! ❤️'
     ];
 
     const assets = [
