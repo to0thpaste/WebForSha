@@ -219,12 +219,12 @@ function typeLogLine(logText) {
 
 async function runTerminalStartup() {
     const logs = [
-        "[INFO] Establishing secure connection to Menula's heart... Success.",
-        '[INFO] Fetching core memories with Shalani... [100%]',
-        '[INFO] Initializing dynamic affection modules...',
-        '[WARN] Warning: Love levels exceeding normal capacity! Overclocking...',
-        '[INFO] Transforming emotional data into digital format...',
-        '[SUCCESS] Heart sync complete. Welcome! ❤️'
+        "[INFO] Establishing secure connection to Menula's heart... Connected. ❤️",
+        '[INFO] Loading precious memories with Shalani... [100%]',
+        '[INFO] Initializing affection & sweet vibes...',
+        '[WARN] Warning: Love levels exceeding max capacity! Overclocking...',
+        '[INFO] Syncing heartbeats and romantic moments...',
+        '[SUCCESS] Heart sync complete! Welcome baby 💕'
     ];
 
     const assets = [
@@ -272,7 +272,7 @@ function showEnterAction() {
     const button = document.createElement('button');
     button.className = 'enter-button';
     button.id = 'enter-lane-btn';
-    button.textContent = 'Enter Memory Lane';
+    button.textContent = 'Enter Memory Lane ✨';
     button.type = 'button';
     button.addEventListener('click', () => {
         const overlay = document.getElementById('loading-screen');
@@ -433,18 +433,18 @@ function initQuizModal() {
 
     const questions = [
         {
-            question: 'What is my favorite time of day to watch the sunset with you?',
-            options: ['Golden hour', 'Midnight', 'Early morning'],
+            question: 'ඔයත් එක්ක Sunset බලන්න මං වැඩියෙන්ම ආස Time එක මොකක්ද? 🌅',
+            options: ['Golden hour ✨', 'Midnight 🌙', 'Early morning ☀️'],
             correct: 0
         },
         {
-            question: 'Which snack do I love sharing with you during movie night?',
-            options: ['Popcorn', 'Chocolate', 'Fruit salad'],
+            question: 'Movie night එකකට ඔයත් එක්ක Share කරගෙන කන්න මං ආසම Snack එක? 🍿',
+            options: ['Popcorn 🍿', 'Chocolate 🍫', 'Fruit salad 🥗'],
             correct: 1
         },
         {
-            question: 'Where did we share our first meaningful conversation?',
-            options: ['Cafe', 'Beach', 'Park'],
+            question: 'අපි දෙන්නා පළවෙනිම Deep Talk එකක් දැම්මේ කොහෙදිද? 💬',
+            options: ['Cafe එකක ☕', 'Beach එකේ 🏖️', 'Park එකේ 🌳'],
             correct: 2
         }
     ];
@@ -472,8 +472,8 @@ function initQuizModal() {
     }
 
     function showSecretNote() {
-        quizContent.innerHTML = '<div class="secret-note"><p>Secret Note:</p><p>Every moment with you is the best part of my day. You are my forever favorite.</p></div>';
-        quizResult.textContent = 'You unlocked the secret note! 💖';
+        quizContent.innerHTML = '<div class="secret-note"><p style="font-weight:600; color:var(--accent-color); font-size:1.15rem; margin-bottom: 8px;">Secret Note for You 💕</p><p>Every single moment with you is the sweetest part of my day. You are my forever & always... I love you so much! 💖✨</p></div>';
+        quizResult.textContent = 'You unlocked the secret note! 💖🎉';
     }
 
     function handleAnswer(answerIndex) {
@@ -487,7 +487,7 @@ function initQuizModal() {
             }
             renderQuestion();
         } else {
-            quizResult.textContent = 'Not quite — try again from the start.';
+            quizResult.textContent = 'Not quite — try again from the start! 😜';
             state.index = 0;
             state.score = 0;
             setTimeout(renderQuestion, 1200);

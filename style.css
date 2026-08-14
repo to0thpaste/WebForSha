@@ -21,10 +21,13 @@ html {
 
 :root {
     --nav-height: 64px;
+    --font-sinhala-romantic: 'Maname', serif;
+    --font-main: 'Poppins', var(--font-sinhala-romantic), sans-serif;
+    --font-handwriting: 'Dancing Script', var(--font-sinhala-romantic), cursive;
 }
 
 body {
-    font-family: 'Poppins', sans-serif;
+    font-family: var(--font-main);
     font-size: 1rem;
     line-height: 1.6;
     color: var(--text-main);
@@ -265,7 +268,7 @@ h6 {
 }
 
 .romantic-heading {
-    font-family: 'Dancing Script', cursive;
+    font-family: var(--font-handwriting);
     font-size: 3.5rem;
     font-weight: 700;
     background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
@@ -494,7 +497,7 @@ section {
 }
 
 .counter-date {
-    font-size: 0.875rem;
+    font-size: 1.05rem;
     color: var(--text-light);
     margin-bottom: 1.5rem;
     font-weight: 500;
@@ -609,7 +612,8 @@ section {
 }
 
 .memory-content p {
-    font-size: 0.9rem;
+    font-size: 1.08rem;
+    line-height: 1.65;
     font-style: italic;
 }
 
@@ -1047,11 +1051,84 @@ section {
 }
 
 .typewriter-text {
-    font-family: 'Poppins', sans-serif;
-    min-height: 4.6rem;
+    font-family: var(--font-main);
+    min-height: 5.2rem;
     color: var(--text-light);
-    line-height: 1.7;
-    font-size: 1rem;
+    line-height: 1.85;
+    font-size: 1.15rem;
+}
+
+/* ==========================================
+ * Romantic Sinhala Typography & Aesthetics
+ * ========================================== */
+
+/* Ensure smooth rendering, ligatures, and romantic spacing for Sinhala script */
+:lang(si),
+[lang="si"],
+.hero-subtitle,
+.section-subtitle,
+.counter-date,
+.timeline-content p,
+.love-note-card p,
+.quiz-header p,
+.quiz-question,
+.timeline-date,
+.typewriter-text {
+    font-feature-settings: "kern" 1, "liga" 1;
+    text-rendering: optimizeLegibility;
+}
+
+/* Enhancements for romantic Sinhala text containers */
+.hero-subtitle {
+    font-family: var(--font-main);
+    font-size: clamp(1.25rem, 3.5vw, 1.7rem);
+    color: var(--text-light);
+    margin-top: 1rem;
+    font-weight: 400;
+    line-height: 1.85;
+    letter-spacing: 0.01em;
+    text-shadow: 0 2px 14px rgba(255, 117, 143, 0.3);
+}
+
+.section-subtitle {
+    text-align: center;
+    color: var(--text-light);
+    margin-top: -1.5rem;
+    margin-bottom: 2rem;
+    font-size: 1.18rem;
+    line-height: 1.75;
+    letter-spacing: 0.01em;
+}
+
+.counter-date,
+.timeline-date {
+    letter-spacing: 0.02em;
+    font-weight: 500;
+    font-size: 1.05rem;
+}
+
+.timeline-content p {
+    font-size: 1.12rem;
+    line-height: 1.85;
+}
+
+.quiz-header p {
+    font-size: 1.1rem;
+    line-height: 1.65;
+}
+
+.quiz-question p {
+    font-size: 1.2rem;
+    line-height: 1.75;
+}
+
+.quiz-button {
+    font-size: 1.05rem;
+}
+
+.love-note-card:hover .typewriter-text,
+.timeline-item:hover .timeline-content p {
+    text-shadow: 0 0 1px rgba(255, 117, 143, 0.4);
 }
 
 .quiz-cta {
