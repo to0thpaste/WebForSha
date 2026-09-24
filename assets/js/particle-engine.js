@@ -1,85 +1,171 @@
 /**
  * ==========================================
- * PHASE 3: Particle Engine
+ * PHASE 3: High-Performance Particle Engine
  * ==========================================
  * 
- * HTML5 Canvas particles with:
- * - Custom heart shapes
- * - Physics (velocity, wind factor, random scaling)
- * - Responsive canvas
+ * Optimized HTML5 Canvas particles with:
+ * - Cached theme colors (zero getComputedStyle calls in render loop)
+ * - Mobile-adaptive particle count (30-40% on mobile devices)
+ * - Page Visibility API pausing (zero CPU/battery when tab is hidden)
+ * - Debounced resize handler
+ * - Reduced motion support
  */
 
 class ParticleEngine {
     constructor(canvasId = 'particle-canvas') {
         this.canvas = document.getElementById(canvasId);
         if (!this.canvas) {
-            console.warn(`Canvas element #${canvasId} not found`);
             return;
         }
 
-        this.ctx = this.canvas.getContext('2d');
+        this.ctx = this.canvas.getContext('2d', { alpha: true });
+        if (!this.ctx) return;
+
         this.particles = [];
         this.animationId = null;
+        this.isPaused = false;
+        this.primaryColor = '#ff758f';
+        this.isMobile = window.innerWidth <= 768;
+        this.reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+        if (this.reducedMotion) {
+            return; // Skip particle engine if reduced motion is requested
+        }
+
+        this.updateThemeColor();
         this.resizeCanvas();
-        window.addEventListener('resize', () => this.resizeCanvas());
+        this.bindEvents();
         this.spawnParticles();
-        this.animate();
+        this.start();
+    }
+
+    updateThemeColor() {
+        try {
+            const computed = getComputedStyle(document.documentElement).getPropertyValue('--primary-color');
+            if (computed && computed.trim()) {
+                this.primaryColor = computed.trim();
+            }
+        } catch (e) {
+            this.primaryColor = '#ff758f';
+        }
+    }
+
+    bindEvents() {
+        // Debounced resize
+        let resizeTimeout;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => {
+                const wasMobile = this.isMobile;
+                this.isMobile = window.innerWidth <= 768;
+                this.resizeCanvas();
+                if (wasMobile !== this.isMobile) {
+                    this.spawnParticles();
+                }
+            }, 150);
+        }, { passive: true });
+
+        // Pause animation when tab is inactive to save mobile CPU & battery
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                this.pause();
+            } else {
+                this.resume();
+            }
+        });
+
+        // Listen for theme changes from theme engine
+        window.addEventListener('themechanged', () => {
+            this.updateThemeColor();
+        });
     }
 
     resizeCanvas() {
+        if (!this.canvas) return;
         this.canvas.width = window.innerWidth;
         this.canvas.height = window.innerHeight;
     }
 
     spawnParticles() {
-        // Create 30-50 heart particles
-        const particleCount = 35 + Math.random() * 15;
+        this.particles = [];
+        // Adaptive particle count: ~12-16 on mobile, ~30-40 on desktop
+        const particleCount = this.isMobile ? (12 + Math.floor(Math.random() * 5)) : (28 + Math.floor(Math.random() * 10));
         for (let i = 0; i < particleCount; i++) {
             this.particles.push(new HeartParticle(this.canvas));
         }
     }
 
     animate() {
+        if (this.isPaused || !this.ctx || !this.canvas) return;
+
         // Clear canvas
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
+        const color = this.primaryColor;
+        const len = this.particles.length;
+
         // Update and draw particles
-        for (let i = this.particles.length - 1; i >= 0; i--) {
+        for (let i = 0; i < len; i++) {
             const particle = this.particles[i];
             particle.update();
-            particle.draw(this.ctx);
+            particle.draw(this.ctx, color);
 
-            // Remove particles that have left the screen
+            // Reset particle if it leaves the top of screen instead of splice+push
             if (particle.isOffScreen()) {
-                this.particles.splice(i, 1);
-                // Spawn a new one
-                this.particles.push(new HeartParticle(this.canvas));
+                particle.reset(this.canvas);
             }
         }
 
         this.animationId = requestAnimationFrame(() => this.animate());
     }
 
-    destroy() {
+    start() {
+        if (!this.animationId) {
+            this.isPaused = false;
+            this.animationId = requestAnimationFrame(() => this.animate());
+        }
+    }
+
+    pause() {
+        this.isPaused = true;
         if (this.animationId) {
             cancelAnimationFrame(this.animationId);
+            this.animationId = null;
         }
+    }
+
+    resume() {
+        if (this.isPaused) {
+            this.isPaused = false;
+            this.animationId = requestAnimationFrame(() => this.animate());
+        }
+    }
+
+    destroy() {
+        this.pause();
+        this.particles = [];
     }
 }
 
 class HeartParticle {
     constructor(canvas) {
-        this.x = Math.random() * canvas.width;
-        this.y = canvas.height + Math.random() * 50;
-        this.size = Math.random() * 20 + 8; // 8-28px
-        this.speedY = -(Math.random() * 2 + 1); // -1 to -3 pixels/frame
-        this.speedX = (Math.random() - 0.5) * 1; // Slight wind factor
-        this.opacity = Math.random() * 0.6 + 0.4; // 0.4 to 1.0
+        this.reset(canvas, true);
+    }
+
+    reset(canvas, initial = false) {
+        const width = canvas ? canvas.width : window.innerWidth;
+        const height = canvas ? canvas.height : window.innerHeight;
+
+        this.x = Math.random() * width;
+        this.y = initial ? Math.random() * height : height + Math.random() * 30 + 10;
+        this.size = Math.random() * 14 + 8; // 8-22px (lighter for mobile)
+        this.speedY = -(Math.random() * 1.5 + 0.8); // Smooth upward drift
+        this.speedX = (Math.random() - 0.5) * 0.8;
+        this.opacity = Math.random() * 0.5 + 0.35; // 0.35 to 0.85
         this.rotation = Math.random() * Math.PI * 2;
-        this.rotationSpeed = (Math.random() - 0.5) * 0.05;
+        this.rotationSpeed = (Math.random() - 0.5) * 0.03;
         this.wobble = Math.random() * 0.02;
-        this.wobbleAmount = 0;
+        this.wobbleAmount = Math.random() * Math.PI;
     }
 
     update() {
@@ -87,57 +173,39 @@ class HeartParticle {
         this.x += this.speedX;
         this.rotation += this.rotationSpeed;
         this.wobbleAmount += this.wobble;
-        this.speedX += Math.sin(this.wobbleAmount) * 0.01; // Subtle wobble
+        this.speedX += Math.sin(this.wobbleAmount) * 0.01;
     }
 
-    draw(ctx) {
+    draw(ctx, color) {
         ctx.save();
         ctx.globalAlpha = this.opacity;
         ctx.translate(this.x, this.y);
         ctx.rotate(this.rotation);
-        ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--primary-color') || '#ff758f';
+        ctx.fillStyle = color;
 
         // Draw heart shape
-        this.drawHeart(ctx, 0, 0, this.size);
+        const scale = this.size / 10;
+        ctx.beginPath();
+        ctx.moveTo(0, -4 * scale);
+        ctx.bezierCurveTo(-3 * scale, -7 * scale, -5 * scale, -5 * scale, -5 * scale, -2 * scale);
+        ctx.bezierCurveTo(-5 * scale, 2 * scale, -2 * scale, 5 * scale, 0, 8 * scale);
+        ctx.bezierCurveTo(2 * scale, 5 * scale, 5 * scale, 2 * scale, 5 * scale, -2 * scale);
+        ctx.bezierCurveTo(5 * scale, -5 * scale, 3 * scale, -7 * scale, 0, -4 * scale);
+        ctx.fill();
 
         ctx.restore();
     }
 
-    drawHeart(ctx, x, y, size) {
-        const scale = size / 10;
-        ctx.beginPath();
-        ctx.moveTo(x, y - 4 * scale);
-        ctx.bezierCurveTo(
-            x - 3 * scale, y - 7 * scale,
-            x - 5 * scale, y - 5 * scale,
-            x - 5 * scale, y - 2 * scale
-        );
-        ctx.bezierCurveTo(
-            x - 5 * scale, y + 2 * scale,
-            x - 2 * scale, y + 5 * scale,
-            x, y + 8 * scale
-        );
-        ctx.bezierCurveTo(
-            x + 2 * scale, y + 5 * scale,
-            x + 5 * scale, y + 2 * scale,
-            x + 5 * scale, y - 2 * scale
-        );
-        ctx.bezierCurveTo(
-            x + 5 * scale, y - 5 * scale,
-            x + 3 * scale, y - 7 * scale,
-            x, y - 4 * scale
-        );
-        ctx.fill();
-    }
-
     isOffScreen() {
-        return this.y < -50 || this.opacity <= 0;
+        return this.y < -40 || this.opacity <= 0;
     }
 }
 
 // Initialize on page load
 if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => new ParticleEngine('particle-canvas'));
+    document.addEventListener('DOMContentLoaded', () => {
+        window.loveParticleEngine = new ParticleEngine('particle-canvas');
+    });
 } else {
-    new ParticleEngine('particle-canvas');
+    window.loveParticleEngine = new ParticleEngine('particle-canvas');
 }

@@ -1,10 +1,11 @@
 /**
  * ==========================================
- * PHASE 4: Real-Time Love Counter
+ * PHASE 4: Real-Time Love Counter (High Performance)
  * ==========================================
  * 
  * Displays live countdown of:
  * Days, Hours, Minutes, Seconds since key moments
+ * Optimized: Cached DOM nodes, textContent-only updates, Visibility API pause
  */
 
 class LoveCounter {
@@ -27,6 +28,9 @@ class LoveCounter {
                 label.textContent = this.nextAnniversary.toLocaleDateString('en-US', opts);
             }
 
+            this.domNodes = {};
+            this.interval = null;
+
             this.init();
         } catch (error) {
             console.warn('LoveCounter initialization failed:', error);
@@ -38,7 +42,6 @@ class LoveCounter {
         const thisYear = now.getFullYear();
         // Relationship anniversary is March 17
         let anniversary = new Date(thisYear, 2, 17); // Month is 0-indexed, so 2 = March
-        // If this year's March 17 has already passed, use next year
         if (now >= anniversary) {
             anniversary = new Date(thisYear + 1, 2, 17);
         }
@@ -47,12 +50,35 @@ class LoveCounter {
 
     init() {
         this.updateCounters();
-        this.interval = setInterval(() => this.updateCounters(), 1000);
+        this.startTimer();
+
+        // Pause interval when tab is inactive to save battery on mobile
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                this.stopTimer();
+            } else {
+                this.updateCounters();
+                this.startTimer();
+            }
+        });
+    }
+
+    startTimer() {
+        if (!this.interval) {
+            this.interval = setInterval(() => this.updateCounters(), 1000);
+        }
+    }
+
+    stopTimer() {
+        if (this.interval) {
+            clearInterval(this.interval);
+            this.interval = null;
+        }
     }
 
     calculateTimeDiff(targetDate) {
         const now = new Date();
-        const diff = now - targetDate;
+        const diff = Math.max(0, now - targetDate);
         
         return {
             days: Math.floor(diff / (1000 * 60 * 60 * 24)),
@@ -64,10 +90,9 @@ class LoveCounter {
 
     calculateCountdown(targetDate) {
         const now = new Date();
-        const diff = targetDate - now; // future date minus now = countdown
+        const diff = targetDate - now;
 
         if (diff <= 0) {
-            // Anniversary has arrived — refresh to show next year
             this.nextAnniversary = this.getNextAnniversary();
             const label = document.getElementById('anniversary-date-label');
             if (label) {
@@ -100,34 +125,52 @@ class LoveCounter {
             this.updateDOM('anniversary-counter', anniversaryCountdown, true);
         } catch (error) {
             console.warn('LoveCounter update failed:', error);
-            clearInterval(this.interval);
+            this.stopTimer();
         }
     }
 
     updateDOM(elementId, timeDiff, isCountdown = false) {
-        const element = document.getElementById(elementId);
-        if (!element) return;
+        let cached = this.domNodes[elementId];
 
-        const label = isCountdown ? 'Until' : '';
+        if (!cached) {
+            const container = document.getElementById(elementId);
+            if (!container) return;
 
-        element.innerHTML = `
-            <div class="counter-item">
-                <span class="counter-value">${timeDiff.days}</span>
-                <span class="counter-label">${isCountdown ? 'Days' : 'Days'}</span>
-            </div>
-            <div class="counter-item">
-                <span class="counter-value">${timeDiff.hours}</span>
-                <span class="counter-label">Hours</span>
-            </div>
-            <div class="counter-item">
-                <span class="counter-value">${timeDiff.minutes}</span>
-                <span class="counter-label">Minutes</span>
-            </div>
-            <div class="counter-item">
-                <span class="counter-value">${timeDiff.seconds}</span>
-                <span class="counter-label">Seconds</span>
-            </div>
-        `;
+            // Render static structure only once
+            container.innerHTML = `
+                <div class="counter-item">
+                    <span class="counter-value" data-unit="days">${timeDiff.days}</span>
+                    <span class="counter-label">Days</span>
+                </div>
+                <div class="counter-item">
+                    <span class="counter-value" data-unit="hours">${timeDiff.hours}</span>
+                    <span class="counter-label">Hours</span>
+                </div>
+                <div class="counter-item">
+                    <span class="counter-value" data-unit="minutes">${timeDiff.minutes}</span>
+                    <span class="counter-label">Minutes</span>
+                </div>
+                <div class="counter-item">
+                    <span class="counter-value" data-unit="seconds">${timeDiff.seconds}</span>
+                    <span class="counter-label">Seconds</span>
+                </div>
+            `;
+
+            cached = {
+                days: container.querySelector('[data-unit="days"]'),
+                hours: container.querySelector('[data-unit="hours"]'),
+                minutes: container.querySelector('[data-unit="minutes"]'),
+                seconds: container.querySelector('[data-unit="seconds"]')
+            };
+            this.domNodes[elementId] = cached;
+            return;
+        }
+
+        // High performance in-place textContent update: 0 layout re-parse
+        if (cached.days.textContent !== String(timeDiff.days)) cached.days.textContent = timeDiff.days;
+        if (cached.hours.textContent !== String(timeDiff.hours)) cached.hours.textContent = timeDiff.hours;
+        if (cached.minutes.textContent !== String(timeDiff.minutes)) cached.minutes.textContent = timeDiff.minutes;
+        if (cached.seconds.textContent !== String(timeDiff.seconds)) cached.seconds.textContent = timeDiff.seconds;
     }
 }
 

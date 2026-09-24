@@ -59,6 +59,7 @@ function applyTheme(theme) {
         document.body.classList.add('theme-night');
     }
     updateThemeToggleButton(theme);
+    window.dispatchEvent(new CustomEvent('themechanged', { detail: { theme } }));
 }
 
 function initializeThemeEngine() {

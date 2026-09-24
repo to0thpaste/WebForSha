@@ -60,16 +60,16 @@ function initMemoryNodeInteractions() {
     document.querySelectorAll('.memory-node').forEach(node => {
         node.addEventListener('mouseenter', () => {
             node.classList.add('glow-pulse');
-        });
+        }, { passive: true });
 
         node.addEventListener('mouseleave', () => {
             node.classList.remove('glow-pulse');
-        });
+        }, { passive: true });
 
         // Mobile touch support
         node.addEventListener('touchstart', () => {
             node.classList.toggle('glow-pulse');
-        });
+        }, { passive: true });
     });
 }
 
@@ -438,6 +438,13 @@ class CelebrationEngine {
         this.isRunning = false;
         this.stopTimer = null;
         this.colors = ['#ff758f', '#ff4d6d', '#ffb3c1', '#ffd166', '#a18cd1', '#fbc2eb', '#ffffff', '#ff9a9e'];
+        this.isMobile = window.innerWidth <= 768;
+
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden && this.isRunning) {
+                this.stop();
+            }
+        });
     }
 
     initCanvas() {
@@ -450,9 +457,17 @@ class CelebrationEngine {
             this.canvas.className = 'celebration-canvas';
             document.body.appendChild(this.canvas);
         }
-        this.ctx = this.canvas.getContext('2d');
+        this.ctx = this.canvas.getContext('2d', { alpha: true });
         this.resize();
-        window.addEventListener('resize', () => this.resize());
+
+        let resizeTimeout;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => {
+                this.isMobile = window.innerWidth <= 768;
+                this.resize();
+            }, 150);
+        }, { passive: true });
     }
 
     resize() {
@@ -461,7 +476,7 @@ class CelebrationEngine {
         this.canvas.height = window.innerHeight;
     }
 
-    start(durationMs = 6500) {
+    start(durationMs = 6000) {
         this.initCanvas();
         if (!this.canvas || !this.ctx) return;
 
@@ -500,17 +515,17 @@ class CelebrationEngine {
             setTimeout(() => {
                 if (this.isRunning) {
                     this.createFirecrackerBurst(x, y);
-                    this.spawnConfettiRain(20);
+                    this.spawnConfettiRain(this.isMobile ? 10 : 20);
                 }
             }, delay);
         });
     }
 
     createFirecrackerBurst(x, y) {
-        const particleCount = 45 + Math.floor(Math.random() * 20);
+        const particleCount = this.isMobile ? (22 + Math.floor(Math.random() * 10)) : (45 + Math.floor(Math.random() * 20));
         for (let i = 0; i < particleCount; i++) {
             const angle = (Math.PI * 2 / particleCount) * i + (Math.random() - 0.5) * 0.3;
-            const speed = Math.random() * 6 + 3;
+            const speed = Math.random() * 5 + 2.5;
             const color = this.colors[Math.floor(Math.random() * this.colors.length)];
             const isHeart = Math.random() < 0.25;
 
@@ -521,8 +536,8 @@ class CelebrationEngine {
                 vy: Math.sin(angle) * speed,
                 color,
                 alpha: 1,
-                decay: Math.random() * 0.015 + 0.012,
-                size: isHeart ? Math.random() * 12 + 8 : Math.random() * 4 + 2,
+                decay: Math.random() * 0.018 + 0.014,
+                size: isHeart ? Math.random() * 10 + 6 : Math.random() * 3 + 2,
                 gravity: 0.12,
                 isHeart,
                 rotation: Math.random() * Math.PI * 2,
@@ -531,17 +546,17 @@ class CelebrationEngine {
         }
     }
 
-    spawnConfettiRain(count = 25) {
+    spawnConfettiRain(count = 20) {
         for (let i = 0; i < count; i++) {
             this.particles.push({
                 x: Math.random() * this.canvas.width,
                 y: -20,
-                vx: (Math.random() - 0.5) * 3,
-                vy: Math.random() * 3 + 2,
+                vx: (Math.random() - 0.5) * 2.5,
+                vy: Math.random() * 2.5 + 1.8,
                 color: this.colors[Math.floor(Math.random() * this.colors.length)],
                 alpha: 1,
-                decay: Math.random() * 0.005 + 0.003,
-                size: Math.random() * 8 + 6,
+                decay: Math.random() * 0.006 + 0.004,
+                size: Math.random() * 7 + 5,
                 gravity: 0.05,
                 isHeart: false,
                 isConfetti: true,
@@ -600,8 +615,6 @@ class CelebrationEngine {
                 this.ctx.save();
                 this.ctx.globalAlpha = p.alpha;
                 this.ctx.fillStyle = p.color;
-                this.ctx.shadowBlur = 8;
-                this.ctx.shadowColor = p.color;
                 this.ctx.beginPath();
                 this.ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
                 this.ctx.fill();
@@ -640,7 +653,7 @@ class CelebrationEngine {
 const celebrationEngine = new CelebrationEngine();
 
 function triggerCelebration() {
-    celebrationEngine.start(7000);
+    celebrationEngine.start(6000);
 }
 
 /**
@@ -910,8 +923,12 @@ window.addEventListener('load', () => {
     initNavToggle();
 });
 
-// Handle responsive changes
-window.addEventListener('resize', handleResponsiveTheme);
+// Handle responsive changes with debouncing
+let themeResizeTimer;
+window.addEventListener('resize', () => {
+    clearTimeout(themeResizeTimer);
+    themeResizeTimer = setTimeout(handleResponsiveTheme, 150);
+}, { passive: true });
 handleResponsiveTheme();
 
 console.log('💕 Ready to celebrate your love story!');
