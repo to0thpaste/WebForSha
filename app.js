@@ -422,6 +422,232 @@ function initTypewriterOnScroll() {
     targets.forEach((target) => observer.observe(target));
 }
 
+/**
+ * ==========================================
+ * Festive Canvas Firecrackers & Confetti Engine
+ * ==========================================
+ */
+class CelebrationEngine {
+    constructor(canvasId = 'celebration-canvas') {
+        this.canvasId = canvasId;
+        this.canvas = document.getElementById(canvasId);
+        this.ctx = null;
+        this.particles = [];
+        this.fireworks = [];
+        this.animationId = null;
+        this.isRunning = false;
+        this.stopTimer = null;
+        this.colors = ['#ff758f', '#ff4d6d', '#ffb3c1', '#ffd166', '#a18cd1', '#fbc2eb', '#ffffff', '#ff9a9e'];
+    }
+
+    initCanvas() {
+        if (!this.canvas) {
+            this.canvas = document.getElementById(this.canvasId);
+        }
+        if (!this.canvas) {
+            this.canvas = document.createElement('canvas');
+            this.canvas.id = this.canvasId;
+            this.canvas.className = 'celebration-canvas';
+            document.body.appendChild(this.canvas);
+        }
+        this.ctx = this.canvas.getContext('2d');
+        this.resize();
+        window.addEventListener('resize', () => this.resize());
+    }
+
+    resize() {
+        if (!this.canvas) return;
+        this.canvas.width = window.innerWidth;
+        this.canvas.height = window.innerHeight;
+    }
+
+    start(durationMs = 6500) {
+        this.initCanvas();
+        if (!this.canvas || !this.ctx) return;
+
+        this.canvas.classList.add('active');
+        this.isRunning = true;
+        this.particles = [];
+        this.fireworks = [];
+
+        // Launch staggered fireworks bursts
+        this.launchBurstSequence();
+
+        if (this.animationId) {
+            cancelAnimationFrame(this.animationId);
+        }
+        this.animate();
+
+        if (this.stopTimer) clearTimeout(this.stopTimer);
+        this.stopTimer = setTimeout(() => {
+            this.isRunning = false;
+        }, durationMs);
+    }
+
+    launchBurstSequence() {
+        const bursts = [
+            { x: window.innerWidth * 0.5, y: window.innerHeight * 0.35, delay: 0 },
+            { x: window.innerWidth * 0.25, y: window.innerHeight * 0.45, delay: 300 },
+            { x: window.innerWidth * 0.75, y: window.innerHeight * 0.4, delay: 600 },
+            { x: window.innerWidth * 0.4, y: window.innerHeight * 0.25, delay: 1100 },
+            { x: window.innerWidth * 0.65, y: window.innerHeight * 0.3, delay: 1600 },
+            { x: window.innerWidth * 0.5, y: window.innerHeight * 0.5, delay: 2200 },
+            { x: window.innerWidth * 0.3, y: window.innerHeight * 0.35, delay: 2800 },
+            { x: window.innerWidth * 0.7, y: window.innerHeight * 0.38, delay: 3400 }
+        ];
+
+        bursts.forEach(({ x, y, delay }) => {
+            setTimeout(() => {
+                if (this.isRunning) {
+                    this.createFirecrackerBurst(x, y);
+                    this.spawnConfettiRain(20);
+                }
+            }, delay);
+        });
+    }
+
+    createFirecrackerBurst(x, y) {
+        const particleCount = 45 + Math.floor(Math.random() * 20);
+        for (let i = 0; i < particleCount; i++) {
+            const angle = (Math.PI * 2 / particleCount) * i + (Math.random() - 0.5) * 0.3;
+            const speed = Math.random() * 6 + 3;
+            const color = this.colors[Math.floor(Math.random() * this.colors.length)];
+            const isHeart = Math.random() < 0.25;
+
+            this.particles.push({
+                x,
+                y,
+                vx: Math.cos(angle) * speed,
+                vy: Math.sin(angle) * speed,
+                color,
+                alpha: 1,
+                decay: Math.random() * 0.015 + 0.012,
+                size: isHeart ? Math.random() * 12 + 8 : Math.random() * 4 + 2,
+                gravity: 0.12,
+                isHeart,
+                rotation: Math.random() * Math.PI * 2,
+                rotationSpeed: (Math.random() - 0.5) * 0.1
+            });
+        }
+    }
+
+    spawnConfettiRain(count = 25) {
+        for (let i = 0; i < count; i++) {
+            this.particles.push({
+                x: Math.random() * this.canvas.width,
+                y: -20,
+                vx: (Math.random() - 0.5) * 3,
+                vy: Math.random() * 3 + 2,
+                color: this.colors[Math.floor(Math.random() * this.colors.length)],
+                alpha: 1,
+                decay: Math.random() * 0.005 + 0.003,
+                size: Math.random() * 8 + 6,
+                gravity: 0.05,
+                isHeart: false,
+                isConfetti: true,
+                rotation: Math.random() * Math.PI * 2,
+                rotationSpeed: (Math.random() - 0.5) * 0.08
+            });
+        }
+    }
+
+    drawHeart(ctx, x, y, size, color, alpha) {
+        ctx.save();
+        ctx.globalAlpha = alpha;
+        ctx.fillStyle = color;
+        ctx.translate(x, y);
+        const s = size / 10;
+        ctx.beginPath();
+        ctx.moveTo(0, -4 * s);
+        ctx.bezierCurveTo(-3 * s, -7 * s, -5 * s, -5 * s, -5 * s, -2 * s);
+        ctx.bezierCurveTo(-5 * s, 2 * s, -2 * s, 5 * s, 0, 8 * s);
+        ctx.bezierCurveTo(2 * s, 5 * s, 5 * s, 2 * s, 5 * s, -2 * s);
+        ctx.bezierCurveTo(5 * s, -5 * s, 3 * s, -7 * s, 0, -4 * s);
+        ctx.fill();
+        ctx.restore();
+    }
+
+    animate() {
+        if (!this.ctx || !this.canvas) return;
+
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+        for (let i = this.particles.length - 1; i >= 0; i--) {
+            const p = this.particles[i];
+            p.x += p.vx;
+            p.y += p.vy;
+            p.vy += p.gravity;
+            p.vx *= 0.98;
+            p.alpha -= p.decay;
+            p.rotation += p.rotationSpeed;
+
+            if (p.alpha <= 0 || p.y > this.canvas.height + 50) {
+                this.particles.splice(i, 1);
+                continue;
+            }
+
+            if (p.isHeart) {
+                this.drawHeart(this.ctx, p.x, p.y, p.size, p.color, p.alpha);
+            } else if (p.isConfetti) {
+                this.ctx.save();
+                this.ctx.globalAlpha = p.alpha;
+                this.ctx.fillStyle = p.color;
+                this.ctx.translate(p.x, p.y);
+                this.ctx.rotate(p.rotation);
+                this.ctx.fillRect(-p.size / 2, -p.size / 3, p.size, p.size / 1.5);
+                this.ctx.restore();
+            } else {
+                this.ctx.save();
+                this.ctx.globalAlpha = p.alpha;
+                this.ctx.fillStyle = p.color;
+                this.ctx.shadowBlur = 8;
+                this.ctx.shadowColor = p.color;
+                this.ctx.beginPath();
+                this.ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                this.ctx.fill();
+                this.ctx.restore();
+            }
+        }
+
+        if (this.particles.length > 0 || this.isRunning) {
+            this.animationId = requestAnimationFrame(() => this.animate());
+        } else {
+            this.canvas.classList.remove('active');
+            if (this.animationId) {
+                cancelAnimationFrame(this.animationId);
+                this.animationId = null;
+            }
+        }
+    }
+
+    stop() {
+        this.isRunning = false;
+        this.particles = [];
+        if (this.canvas) {
+            this.canvas.classList.remove('active');
+            if (this.ctx) {
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            }
+        }
+        if (this.animationId) {
+            cancelAnimationFrame(this.animationId);
+            this.animationId = null;
+        }
+    }
+}
+
+// Global celebration instance
+const celebrationEngine = new CelebrationEngine();
+
+function triggerCelebration() {
+    celebrationEngine.start(7000);
+}
+
+/**
+ * ==========================================
+ * Quiz Modal & Secret Note Surprise Flow
+ * ==========================================
+ */
 function initQuizModal() {
     const quizOpen = document.getElementById('quiz-open-btn');
     const quizModal = document.getElementById('quiz-modal');
@@ -429,22 +655,26 @@ function initQuizModal() {
     const quizContent = document.getElementById('quiz-content');
     const quizResult = document.getElementById('quiz-result');
 
+    const secretModal = document.getElementById('secret-note-modal');
+    const secretClose = document.getElementById('secret-note-close-btn');
+    const secretAccept = document.getElementById('secret-note-accept-btn');
+
     if (!quizOpen || !quizModal || !quizClose || !quizContent || !quizResult) return;
 
     const questions = [
         {
-            question: 'ඔයත් එක්ක Sunset බලන්න මං වැඩියෙන්ම ආස Time එක මොකක්ද? 🌅',
-            options: ['Golden hour ✨', 'Midnight 🌙', 'Early morning ☀️'],
-            correct: 0
-        },
-        {
-            question: 'Movie night එකකට ඔයත් එක්ක Share කරගෙන කන්න මං ආසම Snack එක? 🍿',
-            options: ['Popcorn 🍿', 'Chocolate 🍫', 'Fruit salad 🥗'],
+            question: 'අපි දෙන්නා සින්දුවක් අහද්දි මගේ හිත ඇතුලෙන් මම වැඩියෙන්ම හිතන්නේ මොකක්ද? 🎧',
+            options: ['මෙහෙම නිදහසේ ඉන්න ලැබුණු එක කොච්චර දෙයක්ද කියලා 🍃', 'ලස්සන පද පේළියක් ආවම ඒක ඔයාට ගැලපෙනවා කියලා ❤️', 'නිකන්ම Music එක එන්ජෝයි කරන එක 🎵'],
             correct: 1
         },
         {
-            question: 'අපි දෙන්නා පළවෙනිම Deep Talk එකක් දැම්මේ කොහෙදිද? 💬',
-            options: ['Cafe එකක ☕', 'Beach එකේ 🏖️', 'Park එකේ 🌳'],
+            question: 'අපිට එක පාරටම Trip එකක් යන්න හම්බුණොත් මම තෝරගන්නේ මොන වගේ තැනක්ද? 🗺️',
+            options: ['කන්දක් උඩ, සීතල නිදහස් තැනක් 🏔️', 'මුහුද අයිනේ, හවසට ඉර බහිනවා බලන තැනක් 🌅', 'වැඩිය සෙනඟ නැති Calm Hotel එකක් 🏨'],
+            correct: 0
+        },
+        {
+            question: 'මම ඔයත් එක්ක ඉද්දි මට වෙලාව යනවා තේරෙන්නේ නැත්තේ ඇයි කියලා ඔයා හිතන්නේ? ⏳',
+            options: ['ඔයා කතා කරන විදිහ අහන් ඉන්න ආස නිසා 🗣️', 'අපේ තියෙන Vibe එක සමාන නිසා ⚡', 'මගේ ඔළුවේ තියෙන ප්‍රශ්න ඔක්කොම අමතක වෙන නිසා 🧠'],
             correct: 2
         }
     ];
@@ -471,9 +701,46 @@ function initQuizModal() {
         });
     }
 
-    function showSecretNote() {
-        quizContent.innerHTML = '<div class="secret-note"><p style="font-weight:600; color:var(--accent-color); font-size:1.15rem; margin-bottom: 8px;">Secret Note for You 💕</p><p>Every single moment with you is the sweetest part of my day. You are my forever & always... I love you so much! 💖✨</p></div>';
-        quizResult.textContent = 'You unlocked the secret note! 💖🎉';
+    function closeQuizModal(callback) {
+        quizModal.classList.add('closing');
+        setTimeout(() => {
+            quizModal.classList.remove('active', 'closing');
+            if (callback) callback();
+        }, 320);
+    }
+
+    function openSecretNoteModal() {
+        if (!secretModal) return;
+        secretModal.classList.remove('closing');
+        secretModal.classList.add('active');
+        secretModal.setAttribute('aria-hidden', 'false');
+    }
+
+    function closeSecretNoteModal() {
+        if (!secretModal) return;
+        secretModal.classList.add('closing');
+        setTimeout(() => {
+            secretModal.classList.remove('active', 'closing');
+            secretModal.setAttribute('aria-hidden', 'true');
+            celebrationEngine.stop();
+        }, 350);
+    }
+
+    function handleQuizCompletion() {
+        quizResult.textContent = 'Correct! Unlocking something magical for you... 💖✨';
+
+        // 1. Smoothly close/fade out Question Quiz modal
+        setTimeout(() => {
+            closeQuizModal(() => {
+                // 2. Trigger festive firecrackers & confetti particle animation
+                triggerCelebration();
+
+                // 3. Open brand new Surprise Secret Note Popup with smooth fade & scale-up transition
+                setTimeout(() => {
+                    openSecretNoteModal();
+                }, 380);
+            });
+        }, 400);
     }
 
     function handleAnswer(answerIndex) {
@@ -482,7 +749,7 @@ function initQuizModal() {
             state.score += 1;
             state.index += 1;
             if (state.index === questions.length) {
-                showSecretNote();
+                handleQuizCompletion();
                 return;
             }
             renderQuestion();
@@ -494,18 +761,52 @@ function initQuizModal() {
         }
     }
 
+    // Open Quiz Modal
     quizOpen.addEventListener('click', () => {
+        state.index = 0;
+        state.score = 0;
+        quizModal.classList.remove('closing');
         quizModal.classList.add('active');
+        quizModal.setAttribute('aria-hidden', 'false');
         renderQuestion();
     });
 
+    // Close Quiz Modal via button
     quizClose.addEventListener('click', () => {
-        quizModal.classList.remove('active');
+        closeQuizModal();
     });
 
+    // Close Quiz Modal via backdrop click
     quizModal.addEventListener('click', (event) => {
         if (event.target === quizModal) {
-            quizModal.classList.remove('active');
+            closeQuizModal();
+        }
+    });
+
+    // Secret Note Modal Close Handlers
+    if (secretClose) {
+        secretClose.addEventListener('click', closeSecretNoteModal);
+    }
+    if (secretAccept) {
+        secretAccept.addEventListener('click', closeSecretNoteModal);
+    }
+    if (secretModal) {
+        secretModal.addEventListener('click', (event) => {
+            if (event.target === secretModal || event.target.classList.contains('secret-note-backdrop')) {
+                closeSecretNoteModal();
+            }
+        });
+    }
+
+    // ESC key closes any open modal
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') {
+            if (quizModal.classList.contains('active')) {
+                closeQuizModal();
+            }
+            if (secretModal && secretModal.classList.contains('active')) {
+                closeSecretNoteModal();
+            }
         }
     });
 }
