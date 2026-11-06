@@ -90,21 +90,28 @@ The website is continuously deployed and accessible at:
 WebForSha/
 ├── index.html                  # Main interactive experience & storyline
 ├── gallery.html                # Dedicated responsive photo album page
-├── style.css                   # Core design tokens, layout & glassmorphic styles
-├── app.js                      # Main controller, quiz logic, celebration canvas & routing
-├── script.js                   # Navigation & legacy utility handlers
-├── favicon.ico                 # Multi-format favicons and touch icons
+├── favicon.ico                 # Root fallback favicon icon
 ├── assets/
 │   ├── audio/
 │   │   └── Nubawa_Soya.mp3     # Featured anniversary soundtrack
 │   ├── css/
 │   │   ├── animations.css      # GPU-accelerated keyframe animations & reduced-motion rules
+│   │   ├── style.css           # Core design tokens, layout & glassmorphic styles
 │   │   └── theme.css           # Day/Night palette tokens & transition definitions
+│   ├── favicons/               # Consolidated browser favicons & mobile touch icons
+│   │   ├── apple-touch-icon.png
+│   │   ├── favicon-16x16.png
+│   │   ├── favicon-32x32.png
+│   │   ├── favicon.ico
+│   │   └── favicon.svg
 │   ├── images/                 # Photo memories and responsive gallery assets
 │   └── js/
+│       ├── app.js              # Main controller, quiz logic, celebration canvas & routing
 │       ├── love-counter.js     # Milestone counters & anniversary countdown engine
 │       ├── particle-engine.js  # Mobile-adaptive HTML5 Canvas heart particle system
 │       └── theme-engine.js     # Time-reactive palette controller & event dispatcher
+├── legacy/
+│   └── script.legacy.js        # Archived obsolete navigation script
 └── README.md                   # Project documentation
 ```
 
