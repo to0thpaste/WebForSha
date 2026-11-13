@@ -31,6 +31,14 @@ class LoveCounter {
             this.domNodes = {};
             this.interval = null;
 
+            // Do not start counters or timers if no counter elements are present on this page
+            if (!document.getElementById('anniversary-counter') &&
+                !document.getElementById('first-seen-counter') &&
+                !document.getElementById('relationship-counter') &&
+                !document.getElementById('first-kiss-counter')) {
+                return;
+            }
+
             this.init();
         } catch (error) {
             console.warn('LoveCounter initialization failed:', error);

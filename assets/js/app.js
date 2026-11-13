@@ -178,8 +178,11 @@ function preloadAudioAsset(src) {
         const audio = new Audio();
         audio.preload = 'auto';
         audio.src = src;
-        audio.addEventListener('canplaythrough', () => resolve(src));
-        audio.addEventListener('error', () => resolve(src));
+        const done = () => resolve(src);
+        audio.addEventListener('canplay', done, { once: true });
+        audio.addEventListener('loadeddata', done, { once: true });
+        audio.addEventListener('error', done, { once: true });
+        setTimeout(done, 1500);
         audio.load();
     });
 }
@@ -211,7 +214,7 @@ function typeLogLine(logText) {
                 logContainer.scrollTop = logContainer.scrollHeight;
             } else {
                 clearInterval(interval);
-                setTimeout(resolve, 300);
+                setTimeout(resolve, 250);
             }
         }, speed);
     });
@@ -227,53 +230,49 @@ async function runTerminalStartup() {
         '[SUCCESS] Heart sync complete! Welcome baby 💕'
     ];
 
-    const assets = [
+    // Non-blocking background preload for key hero visuals
+    const heroAssets = [
         'assets/images/WhatsApp Image 2026-06-06 at 6.14.24 PM.jpeg',
-        'assets/images/WhatsApp Image 2026-06-06 at 6.12.08 PM (1).jpeg',
-        'assets/audio/numbawa_soya.mp3'
+        'assets/images/WhatsApp Image 2026-06-06 at 6.12.08 PM (1).jpeg'
     ];
+    heroAssets.forEach((src) => {
+        preloadImage(src).catch(() => src);
+    });
 
-    const assetPromises = assets.map((src) => {
-        if (src.endsWith('.mp3')) {
-            return preloadAudioAsset(src).catch(() => src);
+    // Warm up the actual DOM audio element without blocking the UI
+    const loveAudio = document.getElementById('love-audio');
+    if (loveAudio) {
+        loveAudio.preload = 'auto';
+        try {
+            loveAudio.load();
+        } catch (e) {
+            // Ignore browsers restricting early media load
         }
-        return preloadImage(src).catch(() => src);
-    });
-
-    const totalSteps = logs.length + assets.length;
-    let currentStep = 0;
-
-    const incrementProgress = () => {
-        currentStep += 1;
-        updateTerminalProgress(Math.round((currentStep / totalSteps) * 100));
-    };
-
-    const assetPromisesWithTracking = assetPromises.map((promise) => {
-        return promise.then(() => {
-            incrementProgress();
-        }).catch(() => {
-            incrementProgress();
-        });
-    });
-
-    for (let i = 0; i < logs.length; i += 1) {
-        await typeLogLine(logs[i]);
-        incrementProgress();
     }
 
-    await Promise.all(assetPromisesWithTracking);
-    showEnterAction();
+    // Type logs sequentially with smooth, proportional progress updates
+    for (let i = 0; i < logs.length; i += 1) {
+        await typeLogLine(logs[i]);
+        const progress = Math.min(100, Math.round(((i + 1) / logs.length) * 100));
+        updateTerminalProgress(progress);
+    }
+
+    // Smooth, instant transition to the enter action
+    setTimeout(() => {
+        showEnterAction();
+    }, 250);
 }
 
 function showEnterAction() {
     const enterAction = document.getElementById('enter-action');
-    if (!enterAction) return;
+    if (!enterAction || enterAction.querySelector('.enter-button')) return;
 
     const button = document.createElement('button');
     button.className = 'enter-button';
     button.id = 'enter-lane-btn';
     button.textContent = 'Enter Memory Lane ✨';
     button.type = 'button';
+    button.setAttribute('aria-label', 'Enter Memory Lane');
     button.addEventListener('click', () => {
         const overlay = document.getElementById('loading-screen');
         const audio = document.getElementById('love-audio');
@@ -327,6 +326,18 @@ function initTerminalLoader() {
     const loadingScreen = document.getElementById('loading-screen');
     if (!loadingScreen) return;
 
+    // Allow user to dismiss/skip loading screen with Escape key
+    const handleKeySkip = (e) => {
+        if (e.key === 'Escape') {
+            const overlay = document.getElementById('loading-screen');
+            if (overlay) {
+                skipLoadingScreen();
+            }
+            window.removeEventListener('keydown', handleKeySkip);
+        }
+    };
+    window.addEventListener('keydown', handleKeySkip);
+
     // Check if the current page load is a browser reload/refresh
     const isReload = isPageReload();
 
@@ -347,11 +358,8 @@ function initTerminalLoader() {
     // Set lastPage to index.html for future navigation checks
     sessionStorage.setItem('sml_lastPage', 'index.html');
 
-    if (document.readyState === 'complete') {
-        runTerminalStartup();
-    } else {
-        window.addEventListener('load', runTerminalStartup);
-    }
+    // Start terminal animation immediately without waiting for heavy external assets
+    runTerminalStartup();
 }
 
 function initAudioControlWidget() {

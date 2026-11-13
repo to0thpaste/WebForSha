@@ -1,3 +1,16 @@
+/**
+ * =======================================================================
+ * DEPRECATED / LEGACY SCRIPT ARCHIVE
+ * =======================================================================
+ * This file is an obsolete legacy script from early prototyping.
+ * It references non-existent element IDs (#nav-home, #main-container, etc.)
+ * and throws runtime exceptions if loaded.
+ * 
+ * DO NOT LINK OR IMPORT THIS FILE IN PRODUCTION HTML.
+ * Retained for archival reference only.
+ * =======================================================================
+ */
+
 // Define sections and their corresponding navigation links
 const sections = {
   home: document.getElementById('home'),
